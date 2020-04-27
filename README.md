@@ -9,3 +9,7 @@ This function works by choosing a file first, then inputting the number of the p
 
 
 Select 2 different pdf files and click merge!
+
+
+# Notes
+This is my first real project in python and the code might be a bit unreadable/un-good. Therefore have you have any comments or improvements please share!
