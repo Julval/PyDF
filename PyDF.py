@@ -1,9 +1,13 @@
+# BE AWARE OF POTENTIAL EYE CANCER AHEAD
+# This is my first time dealing with tkinter so some of this code might horrible to look at
+
 
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import ttk, messagebox
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
+#Setup of secondary window 
 def removepages_button():
     global entry_pages
     popup = tk.Toplevel()
@@ -25,6 +29,7 @@ def removepages_button():
     button_close.grid(row=6, column=0)
     popup.mainloop()
 
+#Setup of secondary window 
 def mergefiles_button():
     popup = tk.Toplevel()
     popup.title('Merge files')
@@ -55,6 +60,7 @@ def mergefiles_button():
     popup.mainloop()
 
 def mergefiles():
+    #Creating paths and getting the number of pages in the different files
     infile = PdfFileReader(filename,'rb')
     numberofpages = infile.getNumPages()
     infile2 = PdfFileReader(filename2,'rb')
@@ -62,30 +68,34 @@ def mergefiles():
     output = PdfFileWriter()
     outpath = tk.filedialog.asksaveasfile(mode='wb',defaultextension='.pdf',title='Save New File')
 
-    
+    #adding first set of pages
     for i in range(numberofpages):
         output.addPage(infile.getPage(i))
-
+    #adding second set of pages
     for j in range(numberofpages2):
         output.addPage(infile2.getPage(j))
-
+    #writing final file
     with outpath as f:
         output.write(f)
         tk.messagebox.showinfo('Info','Files merged successfully')
 
     outpath.close()
 
+#Function to select path of a file
 def browse_button():
     global file_path, filename
     filename = tk.filedialog.askopenfilename()
     file_path.set(filename)
 
+#Function to select path of a second file
 def browse_button2():
     global file_path2, filename2
     filename2 = tk.filedialog.askopenfilename()
     file_path2.set(filename2)
 
+# Function that removes chosen pages
 def remove_button():
+    #Checks if a file has been selected
     try:
         filename
     except NameError:
@@ -93,17 +103,20 @@ def remove_button():
     else:
         #Makes list from entry
         num_pages_keep = entry_pages.get()
+        #Creating new lists with list comprehension
         list_pages_keep = [int(k) for k in num_pages_keep.split(',')]
         new_list_pages_keep = [x-1 for x in list_pages_keep]
 
+        # Defining paths
         infile = PdfFileReader(filename,'rb')
         output = PdfFileWriter()
         outpath = tk.filedialog.asksaveasfile(mode='wb',defaultextension='.pdf',title='Save New File')
 
+        #adds selected pages to new file
         for i in new_list_pages_keep:
             p = infile.getPage(i)
             output.addPage(p)
-
+        #Writes new file
         with outpath as f:
             output.write(f)
             tk.messagebox.showinfo('Info','Pages removed successfully')
